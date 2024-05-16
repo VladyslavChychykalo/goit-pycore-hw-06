@@ -21,39 +21,41 @@ class Phone(Field):
 
 
 class Record:
-    def __init__(self, record_name):
+    def __init__(self, record_name: str):
         self.name = Name(record_name)
         self.phones = []
 
-    def __str__(self):
+    def __str__(self) -> str:
         return f"Contact name: {self.name.value}, phones: {'; '.join(p.value for p in self.phones)}"
 
-    def add_phone(self, phone):
+    def add_phone(self, phone: str) -> None:
         phone_obj = Phone(phone)
         phone_obj.validate_phone()
         self.phones.append(phone_obj)
 
-    def edit_phone(self, old_phone, new_phone):
+    def edit_phone(self, old_phone: str, new_phone: str) -> None:
         for phone in self.phones:
             if phone.value == old_phone:
                 phone.value = new_phone
 
-    def find_phone(self, phone):
+    def find_phone(self, phone: str) -> str:
         for p in self.phones:
             if p.value == phone:
                 return p.value
 
+        raise ValueError(f"Phone number '{phone}' not found")
+
 
 class AddressBook(UserDict):
-    def add_record(self, new_record):
+    def add_record(self, new_record: Record) -> None:
         self.data[new_record.name.value] = new_record
 
     @action_error
-    def find(self, search_name):
+    def find(self, search_name: str) -> Record:
         return self.data[search_name]
 
     @action_error
-    def delete(self, search_name):
+    def delete(self, search_name: str) -> None:
         del self.data[search_name]
 
 
@@ -78,7 +80,7 @@ john = book.find("John")
 print(john)
 john.edit_phone("1234567890", "1112223333")
 
-found_phone = john.find_phone("5555555555")
+found_phone = john.find_phone("55555555554")
 print(f"{john.name}: {found_phone}")
 
 book.delete("Jane")
