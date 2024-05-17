@@ -45,6 +45,14 @@ class Record:
 
         raise ValueError(f"Phone number '{phone}' not found")
 
+    def remove_phone(self, phone: str) -> None:
+        for p in self.phones:
+            if p.value == phone:
+                self.phones.remove(p)
+                return
+
+        raise ValueError(f"Phone number '{phone}' not found")
+
 
 class AddressBook(UserDict):
     def add_record(self, new_record: Record) -> None:
